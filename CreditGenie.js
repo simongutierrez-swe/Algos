@@ -36,15 +36,21 @@ function removeItem(name) {
     }
 }
 
-function applyCoupon(name, coupon) {
+function addCoupon(name, coupon) {
     couponBook.set(name, coupon);
 }
 
-function getTotal(cart, book){
+function applyCoupon(name, itemPrice) {
+    const discount = couponBook.get(name) || 0;
+
+    return itemPrice - itemPrice * discount;
+}
+
+function getTotal(cart){
     let total = 0;
 
     for (const [name, item] of cart) {
-        total += (item.quantity * Number(item.price)) * (book.get(name) || 1);
+        total += item.quantity * applyCoupon(name, item.price)
     }
 
     console.log(total);
@@ -66,7 +72,7 @@ console.log(shoppingCart);
 removeItem('bannana');
 console.log(shoppingCart);
 
-applyCoupon('apple', 0.50);
+addCoupon('apple', 0.50);
 
-getTotal(shoppingCart, couponBook);
+getTotal(shoppingCart);
 
