@@ -50,6 +50,49 @@ const badge_times = [
     ['Jennifer',    '5']
   ];
 
+function redFlags2(name, clockInTimes, result) {
+        let left = 0, right = 1;
+        let clockIn = [];
+
+        while (left < clockInTimes.length) {
+            let start = clockInTimes[left], end = clockInTimes[right];
+
+           if (clockIn.length === 0) clockIn.push(start);
+
+           if (end - start <= 100) {
+                clockIn.push(end);
+                right++;
+           } else {
+                if (clockIn.length >= 3) {
+                    result.set(name, clockIn);
+                    break;
+                }
+                left++;
+                right = left + 1;
+                clockIn = [clockInTimes[left]];
+           }
+        }
+}
+
+function findRedFlags2(badgeTimes) {
+    let record = new Map(), result = new Map();
+
+    for (const [name, time] of badgeTimes) {
+        let clockInTimes = record.get(name) || [];
+        record.set(name, [...clockInTimes, Number(time)]);
+    }
+
+    for (const [name, clockInTimes] of record) {
+        clockInTimes.sort((a, b) => a - b);
+        redFlags2(name, clockInTimes, result);
+    }
+
+    return result;
+}
+
+console.log(findRedFlags2(badge_times));
+
+
 const findRedFlags = (array) => {
     let left = 0;
     let right = 1;
@@ -92,7 +135,7 @@ const findShady = (twoDArray) => {
     return redFlags;
 }
 
-console.log(findShady(badge_times))
+// console.log(findShady(badge_times))
 
 /*
 Hard:
@@ -144,6 +187,7 @@ const badge_records = [
     ['Jennifer', '1240', 'exit'],
   ]
 
+
 const findGroup = (twoDArray) => {
     twoDArray.sort((a, b) => a[1] - b[1]);
     let groups = new Map();
@@ -165,7 +209,7 @@ const findGroup = (twoDArray) => {
 }
 
 
-console.log(findGroup(badge_records))
+// console.log(findGroup(badge_records))
 
 
 /*
@@ -248,24 +292,24 @@ function findWords(keypad, words) {
 }
 
 // use hash map a - z
-const numKeypadSolutionsII = (wordlist, keypads) => {
-    let res = [];
-    let wordBank = [];
+// const numKeypadSolutionsII = (wordlist, keypads) => {
+//     let res = [];
+//     let wordBank = [];
 
-    for (let word of wordlist) {
-        let wordObj = { unique: 0 };
-        for (let char of word) {
-            if (!wordObj[char]) {
-                wordObj[char] = 1;
-                wordObj.unique++;
-            }
-        }
-        wordBank.push(wordObj);
-    }
+//     for (let word of wordlist) {
+//         let wordObj = { unique: 0 };
+//         for (let char of word) {
+//             if (!wordObj[char]) {
+//                 wordObj[char] = 1;
+//                 wordObj.unique++;
+//             }
+//         }
+//         wordBank.push(wordObj);
+//     }
 
-    for (let keypad of keypads) {
-        for (let i = 0; i < keypad.length; i++) {
+//     for (let keypad of keypads) {
+//         for (let i = 0; i < keypad.length; i++) {
 
-        }
-    }
-}
+//         }
+//     }
+// }
