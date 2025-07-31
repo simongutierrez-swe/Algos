@@ -4,25 +4,17 @@ function caesarCipherEncryptor(string, key) {
 
     let newLetters = [];
 
-    for (let i = 0; i < string.length; i++) {
-        let letter = string[i];
-        newLetters.push(helper(alphabet, letter, key))
-    }
+    for (let i = 0; i < string.length; i++) newLetters.push(helper(alphabet, string[i], key));
 
     return newLetters.join('');
   }
 
 function helper(alphabet, letter, key) {
-    let index = alphabet.indexOf(letter);
-    let newindex = index + key ;
+    let newindex = alphabet.indexOf(letter) + key;
 
-    if (newindex > 25) {
-        newindex = newindex % 25 - 1;
-    }
+    if (newindex > 25) newindex = newindex % 25 - 1;
 
-    const newLetter = alphabet[newindex]
-
-    return newLetter;
+    return alphabet[newindex];
 }
 
   console.log(caesarCipherEncryptor('abc', 2)) // cde

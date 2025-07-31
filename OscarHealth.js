@@ -19,21 +19,22 @@ function groupTransactions(transactions) {
     }
 
     let ordered = [...seen.values()].sort((a, b) => {
-       if (a[a.length - 1] !== b[b.length - 1]) {
-           return b[b.length - 1] - a[a.length - 1];
+        let first = a.split(' '), second = b.split(' ');
+       if (first[1] !== second[1]) {
+           return  second[1] - first[1];
        } else {
-           return a.split(' ')[0].localeCompare(b.split(' ')[0]);
+           return first[0].localeCompare(second[0]);
        }
-    })
+    });
 
     return ordered;
 }
 
-let test = ['bin', 'can', 'bin', 'bin']
-let test2 = ['kkldp', 'kkldp', 'kkldp', 'zzxl', 'aabbs', 'bbuuy']
+let test = ['bin', 'can', 'bin', 'bin'];
+let test2 = ['kkldp', 'kkldp', 'kkldp', 'zzxl', 'aabbs', 'aabbz', 'bbuuy'];
 
-console.log(groupTransactions(test));
-console.log(groupTransactions(test2));
+console.log(groupTransactions(test)); // [ 'bin 3', 'can 1' ]
+console.log(groupTransactions(test2)); // [ 'kkldp 3', 'aabbs 1', 'bbuuy 1', 'zzxl 1' ]
 
 /*
 
@@ -51,8 +52,11 @@ function decode(encode) {
     let alphabetBank = new Map();
     let message = '';
 
-    for (let i = 0; i < 26; i++) alphabetBank.set(`${i + 65}`, String.fromCharCode(i + 65));
-    for (let i = 0; i < 26; i++) alphabetBank.set(`${i + 97}`, String.fromCharCode(i + 97));
+    for (let i = 0; i < 26; i++) {
+        alphabetBank.set(`${i + 65}`, String.fromCharCode(i + 65));
+        alphabetBank.set(`${i + 97}`, String.fromCharCode(i + 97));
+    }
+
     alphabetBank.set('32', ' ');
 
     let pointer = encode.length - 1;

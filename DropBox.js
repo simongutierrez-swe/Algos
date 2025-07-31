@@ -90,7 +90,7 @@ function findRedFlags2(badgeTimes) {
     return result;
 }
 
-console.log(findRedFlags2(badge_times));
+// console.log(findRedFlags2(badge_times));
 
 
 const findRedFlags = (array) => {
@@ -209,7 +209,7 @@ const findGroup = (twoDArray) => {
 }
 
 
-// console.log(findGroup(badge_records))
+console.log(findGroup(badge_records))
 
 
 /*
