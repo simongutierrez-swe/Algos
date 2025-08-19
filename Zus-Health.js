@@ -87,3 +87,52 @@ function mapConditionsToPatients(patients) {
 }
 
 console.log(mapConditionsToPatients(listOfConditions));
+
+/*
+Prompt:
+You are building a service that fetches medication records for patients. The API you’re given returns data in the following format:
+
+[
+  { "patientId": "p1", "medication": "Metformin", "status": "active" },
+  { "patientId": "p2", "medication": "Lisinopril", "status": "inactive" },
+  { "patientId": "p1", "medication": "Insulin", "status": "active" }
+]
+Write a JavaScript function that:
+
+Accepts this array of records.
+
+Returns a new object mapping each patientId to an array of their active medications.
+
+Expected Output (for the above input):
+
+{
+  "p1": ["Metformin", "Insulin"],
+  "p2": []
+}
+*/
+
+const listOfPatients =
+[
+  { patientId: 'p1', medication: 'Metformin', status: 'active' },
+  { patientId: 'p2', medication: 'Lisinopril', status: 'inactive' },
+  { patientId: 'p1', medication: 'Insulin', status: 'active' }
+];
+
+
+function medRecs(listOfPatients) {
+    return listOfPatients.reduce((acc, patient) => {
+        acc[patient.patientId] =  acc[patient.patientId] || [];
+
+        if (patient.status === 'active') acc[patient.patientId] = [...acc[patient.patientId], patient.medication];
+
+        return acc;
+    }, {})
+}
+
+console.log(medRecs(listOfPatients));
+/*
+{
+  "p1": ["Metformin", "Insulin"],
+  "p2": []
+}
+*/
