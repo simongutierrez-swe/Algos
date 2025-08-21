@@ -67,7 +67,7 @@ function mapConditions(listOfPatients) {
     return conditions;
 }
 
-console.log(mapConditions(listOfConditions));
+// console.log(mapConditions(listOfConditions));
 /*
 {
   "E11": ["Alice Johnson"],
@@ -86,7 +86,7 @@ function mapConditionsToPatients(patients) {
   }, {});
 }
 
-console.log(mapConditionsToPatients(listOfConditions));
+// console.log(mapConditionsToPatients(listOfConditions));
 
 /*
 Prompt:
@@ -129,10 +129,92 @@ function medRecs(listOfPatients) {
     }, {})
 }
 
-console.log(medRecs(listOfPatients));
+// console.log(medRecs(listOfPatients));
+
 /*
 {
   "p1": ["Metformin", "Insulin"],
   "p2": []
 }
 */
+
+/**
+ * Prompt:
+You’re building a service to fetch patients and their medications. You are given two asynchronous API functions:
+
+async function fetchPatients() {
+  // Returns array of patients
+  return [
+    { id: "p1", name: "Alice" },
+    { id: "p2", name: "Bob" }
+  ];
+}
+
+async function fetchMedications() {
+  // Returns array of medication records
+  return [
+    { patientId: "p1", medication: "Metformin", status: "active" },
+    { patientId: "p1", medication: "Insulin", status: "inactive" },
+    { patientId: "p2", medication: "Lisinopril", status: "active" }
+  ];
+}
+Write an async function that:
+
+Fetches both patients and medications.
+
+Returns an array of patient objects, where each patient has a new field activeMedications listing only their active medications.
+
+Expected Output:
+[
+  { "id": "p1", "name": "Alice", "activeMedications": ["Metformin"] },
+  { "id": "p2", "name": "Bob", "activeMedications": ["Lisinopril"] }
+]
+ */
+
+async function fetchPatients() {
+  // Returns array of patients
+  return [
+    { id: 'p1', name: 'Alice' },
+    { id: 'p2', name: 'Bob' }
+  ];
+}
+
+async function fetchMedications() {
+  // Returns array of medication records
+  return [
+    { patientId: 'p1', medication: 'Metformin', status: 'active' },
+    { patientId: 'p1', medication: 'Insulin', status: 'inactive' },
+    { patientId: 'p2', medication: 'Lisinopril', status: 'active' }
+  ];
+}
+
+async function fetchAndMergePatientMeds(asyncFetchMeds, asyncFetchPats) {
+        let medData, patData, sol, medsByPatient;
+
+        try {
+          medData = await asyncFetchMeds();
+          medsByPatient = medData.reduce((acc, med) => {
+            acc[med.patientId] = acc[med.patientId] ? acc[med.patientId] : [];
+            acc[med.patientId] = med.status === 'active' ? [...acc[med.patientId], med.medication] : acc[med.patientId];
+            return acc;
+          }, {});
+        } catch (error) {
+          console.log('Something went wrong fetching medication data', error);
+        }
+
+        try {
+          patData = await asyncFetchPats();
+          sol = patData.map((pat) => {
+            pat.activeMedications = medsByPatient[pat.id] || [];
+            return pat;
+          });
+        } catch (error) {
+          console.log('Something went wrong fetching patient data', error);
+        }
+
+        console.log(sol);
+
+        return sol;
+}
+
+console.log(fetchAndMergePatientMeds(fetchMedications, fetchPatients));
