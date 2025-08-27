@@ -218,3 +218,4 @@ async function fetchAndMergePatientMeds(asyncFetchMeds, asyncFetchPats) {
 }
 
 console.log(fetchAndMergePatientMeds(fetchMedications, fetchPatients));
+
