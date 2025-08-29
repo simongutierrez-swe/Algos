@@ -39,7 +39,6 @@ Generics
 
 */
 
-
 // exercise: Write type definitions for simple objects: Patient, Appointment, Medication
 //Create functions that manipulate these types safely (e.g., getUpcomingAppointments(patient)).
 
@@ -48,7 +47,8 @@ interface Patient {
     firstName: string,
     lastName: string,
     sex: string,
-    dob: Date
+    dob: Date,
+    BP?: string
 }
 
 interface Appointment {
@@ -61,7 +61,8 @@ interface Appointment {
 interface Medication {
     id: number,
     name: string,
-    dosage: number
+    dosage: number,
+    ptsOnMeds?: Array<number>
 }
 
 const patient1: Patient = {
@@ -70,6 +71,43 @@ const patient1: Patient = {
       lastName: 'Doe',
       sex: 'M',
       dob: new Date(2025, 1, 1)
+    };
+
+
+const patient2: Patient = {
+      MRN: 2,
+      firstName: 'Jane',
+      lastName: 'Doe',
+      sex: 'F',
+      dob: new Date(2025, 1, 1),
+      BP: '120/70'
+    };
+
+const patient3: Patient = {
+      MRN: 3,
+      firstName: 'Joe',
+      lastName: 'Dirt',
+      sex: 'M',
+      dob: new Date(2025, 1, 1),
+      BP: '120/70'
+    };
+
+const patient4: Patient = {
+      MRN: 4,
+      firstName: 'Jose',
+      lastName: 'Domingo',
+      sex: 'M',
+      dob: new Date(2025, 1, 1),
+      BP: '120/70'
+    };
+
+const patient5: Patient = {
+      MRN: 5,
+      firstName: 'Jesus',
+      lastName: 'Nazereth',
+      sex: 'M',
+      dob: new Date(2025, 1, 1),
+      BP: '150/50'
     };
 
 const appointment1: Appointment = {
@@ -100,7 +138,43 @@ const appointment4: Appointment = {
     bookedPatient: 1
 }
 
+const medication1: Medication = {
+    id: 1,
+    name: 'Advil',
+    dosage: 2.5,
+    ptsOnMeds: [1, 2, 3, 4, 5]
+}
+
+const medication2: Medication = {
+    id: 2,
+    name: 'Tylenol',
+    dosage: 2.5,
+    ptsOnMeds: [2, 3, 5]
+}
+
+const medication3: Medication = {
+    id: 3,
+    name: 'Doxitocen',
+    dosage: 2.5,
+    ptsOnMeds: [1, 4, 3]
+}
+
+const medication4: Medication = {
+    id: 4,
+    name: 'Retuximab',
+    dosage: 2.5,
+    ptsOnMeds: [1, 3]
+}
+
+const medication5: Medication = {
+    id: 5,
+    name: 'Entyvio',
+    dosage: 2.5
+}
+
 const listOfAppointments: Array<Appointment> = [appointment1, appointment2, appointment3, appointment4];
+const listOfMedications: Array<Medication> = [medication1, medication2, medication3, medication4, medication5];
+const listOfPatient: Array<Patient> = [patient1, patient2, patient3, patient4, patient5];
 
 function getUpcomingAppointments(patient: Patient, appointments: Array<Appointment>): Array<Appointment> {
     const filtered = appointments.filter(x => x.bookedPatient === patient.MRN);
@@ -109,3 +183,37 @@ function getUpcomingAppointments(patient: Patient, appointments: Array<Appointme
 }
 
 console.log(getUpcomingAppointments(patient1, listOfAppointments));
+
+// return an array of medications names
+function getPatientMedications(patient: Patient, medications: Array<Medication>): Array<string> {
+    const meds:Array<string> = [];
+
+    for (const med of medications) {
+        if (med.ptsOnMeds?.includes(patient.MRN)) meds.push(med.name);
+    }
+
+    return meds;
+}
+
+console.log(getPatientMedications(patient1, listOfMedications));
+
+
+function getListOfPatientsOnMedication(medication: Medication, patients: Array<Patient>): Array<Patient> {
+    const filtered = patients.filter((x) => {
+         if (medication.ptsOnMeds?.includes(x.MRN)) return x;
+    });
+
+    return filtered;
+}
+
+console.log(getListOfPatientsOnMedication(medication2, listOfPatient)); // []
+
+const test1: Array<Patient> = getListOfPatientsOnMedication(medication2, listOfPatient);
+
+function doesBPMedicationWork(patients: Array<Patient>): boolean {
+    const filtered = patients.filter(x => x.BP === '120/70');
+
+    return filtered.length <= 2;
+}
+
+console.log(doesBPMedicationWork(test1));
